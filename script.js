@@ -1,4 +1,4 @@
-// 30-day schedule data
+// 90-day AI-only schedule
 const schedule = [
     // Week 1: AI Foundations
     { day: 1, task: "Read Chapter 1 of Artificial Intelligence: A Modern Approach", link: "", prompt: "How does AI mimic human intelligence?", time: "1 hr", subject: "AI" },
@@ -104,87 +104,53 @@ const schedule = [
     { day: 90, task: "Create a portfolio of AI projects and share on GitHub", link: "https://github.com/", prompt: "How does this portfolio position you as an AI doctor?", time: "2 hrs", subject: "AI" }
 ];
 
-// Load tasks
+// Display schedule and handle interactions
 document.addEventListener('DOMContentLoaded', () => {
-    const taskList = document.getElementById('task-list');
-    const progressList = document.getElementById('progress-list');
-    function readAloud(id) {
-    const text = document.getElementById(id).innerText;
-    if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        speechSynthesis.speak(utterance);
-    } else {
-        alert('Browser does not support text-to-speech. Use Chrome Read Aloud extension.');
+    const scheduleDiv = document.getElementById('schedule-list');
+    const today = new Date('2025-08-28'); // Start date
+    const startDate = new Date('2025-08-28');
+    const currentDay = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    const todayTask = schedule.find(task => task.day === currentDay);
+
+    if (todayTask) {
+        alert(Today's AI Mission (Day ${todayTask.day}): ${todayTask.task} (${todayTask.time}));
     }
-}
 
     schedule.forEach(task => {
         const taskDiv = document.createElement('div');
-        taskDiv.classList.add('task');
+        taskDiv.className = 'task';
         taskDiv.innerHTML = `
-            <input type="checkbox" id="task-${task.day}" ${localStorage.getItem(task-${task.day}) === 'true' ? 'checked' : ''}>
-            <label for="task-${task.day}">Day ${task.day}: ${task.task}</label>
-            <button onclick="toggleDetails(${task.day})">Details</button>
+            <h3>Day ${task.day}: ${task.task}</h3>
+            <input type="checkbox" id="task-${task.day}">
+            <button onclick="toggleDetails('details-${task.day}')">Details</button>
             <div id="details-${task.day}" class="task-details">
-            <p><strong>Time:</strong> ${task.time || '1-2 hrs'}</p>
-                <p><strong>Resource:</strong> ${task.link ? <a href="${task.link}" target="_blank">${task.task}</a> : 'Check your book or X'}</p>
+                <p><strong>Time:</strong> ${task.time || '1-2 hrs'}</p>
+                <p><strong>Resource:</strong> <a href="${task.link}">${task.link || 'No link'}</a></p>
                 <p><strong>Journal Prompt:</strong> ${task.prompt}</p>
-                 </div>
+                <button onclick="readAloud('details-${task.day}')">Read Aloud</button>
+            </div>
         `;
-                taskDiv.innerHTML = `
-    <h3>Day ${task.day}: ${task.task}</h3>
-    <input type="checkbox" id="task-${task.day}">
-    <button onclick="toggleDetails('details-${task.day}')">Details</button>
-    <div id="details-${task.day}" class="task-details">
-        <p><strong>Resource:</strong> <a href="${task.link}">${task.link || 'No link'}</a></p>
-        <p><strong>Journal Prompt:</strong> ${task.prompt}</p>
-        <button onclick="readAloud('details-${task.day}')">Read Aloud</button>
-    </div>
-`;
-           
-        taskList.appendChild(taskDiv);
-
-        const progressDiv = document.createElement('div');
-        progressDiv.innerHTML = `<p>Day ${task.day}: ${task.task} - ${localStorage.getItem(task-${task.day}) === 'true' ? 'Completed' : 'Pending'}</p>`;
-        progressList.appendChild(progressDiv);
+        scheduleDiv.appendChild(taskDiv);
     });
 
-    // Journal form
-    const journalForm = document.getElementById('journal-form');
-    journalForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const entry = document.getElementById('journal-entry').value;
-        const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
-        entries.push({ date: new Date().toLocaleDateString(), entry });
-        localStorage.setItem('journalEntries', JSON.stringify(entries));
-        alert('Journal entry saved!');
-        document.getElementById('journal-entry').value = '';
+    // Progress tracking
+    const progressDiv = document.getElementById('stars');
+    const updateProgress = () => {
+        const completed = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).length;
+        progressDiv.innerHTML = '🧠'.repeat(completed);
+    };
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateProgress);
     });
-
-    // Daily reminder (basic alert)
-    const today = new Date().getDate();
-    const todayTask = schedule.find(task => task.day === today);
-    if (todayTask) {
-        alert(Today's Task (Day ${todayTask.day}): ${todayTask.task});
-    }
 });
 
 // Toggle task details
-function toggleDetails(day) {
-    const details = document.getElementById(details-${day});
+function toggleDetails(id) {
+    const details = document.getElementById(id);
     details.classList.toggle('active');
 }
 
-// Save task completion
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-        localStorage.setItem(checkbox.id, checkbox.checked);
-        location.reload(); // Refresh progress
-    });
-
-});
-
+// Text-to-speech function
 function readAloud(id) {
     const text = document.getElementById(id).innerText;
     if ('speechSynthesis' in window) {
@@ -196,3 +162,9 @@ function readAloud(id) {
     }
 }
 
+// Motivational pop-ups
+const tips = ["You’re on track to be an AI doctor!", "Master AI with daily practice!", "Ethics is the heart of AI!"];
+window.onload = () => {
+    if (!schedule.find(task => task.day === Math.floor((new Date() - new Date('2025-08-28')) / (1000 * 60 * 60 * 24)) + 1)) return;
+    alert(tips[Math.floor(Math.random() * tips.length)]);
+};
