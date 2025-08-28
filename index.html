@@ -73,14 +73,15 @@
         </section>
 
         <section id="progress">
-            <h2>Progress Tracker</h2>
-            <div id="progress-list"></div>
-            <form id="journal-form">
-                <label for="journal-entry">Journal Entry:</label>
-                <textarea id="journal-entry" rows="4" cols="50"></textarea>
-                <button type="submit">Save Journal</button>
-            </form>
-        </section>
+    <h2>AI Master Progress Tracker</h2>
+    <p>Completed Tasks: <span id="stars"></span></p>
+    <h3>Journal Your AI Journey</h3>
+    <p>Reflect on today’s prompt to deepen your AI expertise (e.g., "How does AI mimic human intelligence?").</p>
+    <textarea id="journal" placeholder="Write your reflections here (saved locally)" rows="5"></textarea>
+    <button onclick="saveJournal()">Save Journal</button>
+    <button onclick="clearJournal()">Clear Journal</button>
+    <p id="journal-status"></p>
+</section>
     </main>
 
     <footer>
@@ -89,4 +90,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
