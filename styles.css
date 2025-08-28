@@ -1,100 +1,163 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto:wght@400&display=swap');
+
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
     padding: 0;
     line-height: 1.6;
-    background-color: #f4f4f4;
+    background: linear-gradient(to bottom, #0A0F2B, #1C2526);
+    color: #E6E6FA;
+    background-image: url('https://img.freepik.com/free-vector/digital-technology-background-with-circuit-board-pattern_1017-37276.jpg');
+    background-size: cover;
+    background-attachment: fixed;
 }
 
+/* Header */
 header {
-    background: #333;
-    color: #fff;
-    padding: 10px 0;
+    background: linear-gradient(90deg, #00B7EB, #FF00FF);
+    color: #0A0F2B;
+    padding: 20px 0;
     text-align: center;
+    box-shadow: 0 4px 12px rgba(0,183,235,0.5);
 }
 
 header h1 {
+    font-family: 'Orbitron', sans-serif;
     margin: 0;
+    font-size: 2.8em;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
 }
 
 nav ul {
     list-style: none;
-    padding: 0;
+    padding: 10px 0;
 }
 
 nav ul li {
     display: inline;
-    margin: 0 15px;
+    margin: 0 20px;
 }
 
 nav ul li a {
-    color: #fff;
+    color: #0A0F2B;
     text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s, text-shadow 0.3s;
 }
 
+nav ul li a:hover {
+    color: #FF00FF;
+    text-shadow: 0 0 10px #FF00FF;
+}
+
+/* Main Content */
 main {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 25px;
+    background: rgba(10,15,43,0.8);
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(0,183,235,0.4);
+    color: #E6E6FA;
 }
 
-section {
-    margin-bottom: 30px;
-}
-
+/* Headings */
 h2, h3 {
-    color: #333;
+    font-family: 'Orbitron', sans-serif;
+    color: #00B7EB;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
 }
 
+/* Tasks */
 .task {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
+    border-bottom: 2px solid #FF00FF;
+    padding: 15px 0;
+    transition: transform 0.3s, box-shadow 0.3s;
+    color: #E6E6FA;
+}
+
+.task:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 15px rgba(255,0,255,0.3);
 }
 
 .task-details {
     display: none;
     margin-top: 10px;
+    background: rgba(0,183,235,0.3);
+    padding: 15px;
+    border-radius: 8px;
+    color: #E6E6FA;
 }
 
 .task-details.active {
     display: block;
 }
 
+.task button {
+    background: #00B7EB;
+    color: #0A0F2B;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.task button:hover {
+    background: #FF00FF;
+    transform: translateY(-3px);
+}
+
+/* Form */
 textarea {
     width: 100%;
     margin-top: 10px;
+    background: #0A0F2B;
+    color: #E6E6FA;
+    border: 1px solid #00B7EB;
+    border-radius: 8px;
+    padding: 12px;
 }
 
 button {
-    background: #333;
-    color: #fff;
-    padding: 8px 16px;
+    background: #00B7EB;
+    color: #0A0F2B;
+    padding: 12px 24px;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
 button:hover {
-    background: #555;
+    background: #FF00FF;
 }
 
+/* Footer */
 footer {
     text-align: center;
-    padding: 10px 0;
-    background: #333;
-    color: #fff;
+    padding: 20px 0;
+    background: #0A0F2B;
+    color: #E6E6FA;
     position: fixed;
     bottom: 0;
     width: 100%;
+    box-shadow: 0 -3px 10px rgba(0,183,235,0.3);
 }
 
+/* Responsive Design */
 @media (max-width: 600px) {
     nav ul li {
         display: block;
-        margin: 10px 0;
+        margin: 15px 0;
     }
     main {
-        padding: 10px;
+        padding: 15px;
+    }
+    header h1 {
+        font-size: 2em;
     }
 }
