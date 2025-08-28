@@ -162,9 +162,29 @@ function readAloud(id) {
     }
 }
 
+function saveJournal() {
+    const journal = document.getElementById('journal').value;
+    localStorage.setItem('aiJournal', journal);
+    document.getElementById('journal-status').innerText = 'Journal saved locally!';
+}
+
+function clearJournal() {
+    document.getElementById('journal').value = '';
+    localStorage.removeItem('aiJournal');
+    document.getElementById('journal-status').innerText = 'Journal cleared!';
+}
+
+// Load saved journal on page load
+document.addEventListener('DOMContentLoaded', () => {
+    const savedJournal = localStorage.getItem('aiJournal');
+    if (savedJournal) {
+        document.getElementById('journal').value = savedJournal;
+    }
+});
 // Motivational pop-ups
 const tips = ["You’re on track to be an AI doctor!", "Master AI with daily practice!", "Ethics is the heart of AI!"];
 window.onload = () => {
     if (!schedule.find(task => task.day === Math.floor((new Date() - new Date('2025-08-28')) / (1000 * 60 * 60 * 24)) + 1)) return;
     alert(tips[Math.floor(Math.random() * tips.length)]);
 };
+
