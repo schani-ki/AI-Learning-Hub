@@ -95,6 +95,24 @@ const schedule = [
 // Display schedule and handle interactions
 document.addEventListener('DOMContentLoaded', () => {
     const scheduleDiv = document.getElementById('schedule-list');
+    const progressDiv = document.getElementById('stars');
+    const journalInput = document.getElementById('journal');
+    const journalStatus = document.getElementById('journal-status');
+    const journalDate = document.getElementById('journal-date');
+
+    // Error handling for missing elements
+    if (!scheduleDiv) {
+        console.error('Error: schedule-list element not found in HTML');
+        return;
+    }
+    if (!progressDiv) {
+        console.error('Error: stars element not found in HTML');
+        return;
+    }
+    if (!journalInput || !journalStatus || !journalDate) {
+        console.error('Error: journal, journal-status, or journal-date element not found in HTML');
+    }
+
     const today = new Date('2025-08-28'); // Start date
     const startDate = new Date('2025-08-28');
     const currentDay = Math.floor((today - startDate) / (1000 * 60 * 60 * 24)) + 1;
@@ -122,32 +140,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Progress tracking
-    const progressDiv = document.getElementById('stars');
     const updateProgress = () => {
-        const completed = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).length;
-        progressDiv.innerHTML = '🧠'.repeat(completed);
+        if (progressDiv) {
+            const completed = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).length;
+            progressDiv.innerHTML = '🧠'.repeat(completed);
+        }
     };
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', updateProgress);
     });
 
-    // Load saved journal
-    const savedJournal = localStorage.getItem('aiJournal');
-    if (savedJournal) {
-        document.getElementById('journal').value = savedJournal;
+    // Load today’s journal
+    if (journalDate && journalInput) {
+        const todayDate = '2025-08-28';
+        journalDate.value = todayDate;
+        const savedJournal = localStorage.getItem(aiJournal_${todayDate});
+        if (savedJournal) {
+            journalInput.value = savedJournal;
+            if (journalStatus) {
+                journalStatus.innerText = Loaded journal for ${todayDate};
+            }
+        }
     }
 });
 
 // Toggle task details
 function toggleDetails(id) {
     const details = document.getElementById(id);
-    details.classList.toggle('active');
+    if (details) {
+        details.classList.toggle('active');
+    }
 }
 
 // Text-to-speech function
 function readAloud(id) {
-    const text = document.getElementById(id).innerText;
-    if ('speechSynthesis' in window) {
+    const textElement = document.getElementById(id);
+    if (textElement && 'speechSynthesis' in window) {
+        const text = textElement.innerText;
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'en-US';
         speechSynthesis.speak(utterance);
@@ -156,22 +185,53 @@ function readAloud(id) {
     }
 }
 
-// Journal save and clear
+// Journal save, load, and clear
 function saveJournal() {
-    const journal = document.getElementById('journal').value;
-    localStorage.setItem('aiJournal', journal);
-    document.getElementById('journal-status').innerText = 'Journal saved locally!';
+    const journal = document.getElementById('journal');
+    const date = document.getElementById('journal-date');
+    const status = document.getElementById('journal-status');
+    if (journal && date && status && journal.value && date.value) {
+        localStorage.setItem(aiJournal_${date.value}, journal.value);
+        status.innerText = Journal saved for ${date.value}!;
+    } else {
+        if (status) {
+            status.innerText = 'Please enter a date and journal entry.';
+        }
+    }
+}
+
+function loadJournal() {
+    const date = document.getElementById('journal-date');
+    const journal = document.getElementById('journal');
+    const status = document.getElementById('journal-status');
+    if (date && journal && status) {
+        const savedJournal = localStorage.getItem(aiJournal_${date.value});
+        if (savedJournal) {
+            journal.value = savedJournal;
+            status.innerText = Loaded journal for ${date.value};
+        } else {
+            journal.value = '';
+            status.innerText = No journal found for ${date.value};
+        }
+    }
 }
 
 function clearJournal() {
-    document.getElementById('journal').value = '';
-    localStorage.removeItem('aiJournal');
-    document.getElementById('journal-status').innerText = 'Journal cleared!';
+    const date = document.getElementById('journal-date');
+    const journal = document.getElementById('journal');
+    const status = document.getElementById('journal-status');
+    if (date && journal && status) {
+        journal.value = '';
+        localStorage.removeItem(aiJournal_${date.value});
+        status.innerText = Journal cleared for ${date.value};
+    }
 }
 
 // Motivational pop-ups
 const tips = ["You’re on track to be an AI doctor!", "Master AI with daily practice!", "Ethics is the heart of AI!"];
 window.onload = () => {
-    if (!schedule.find(task => task.day === Math.floor((new Date() - new Date('2025-08-28')) / (1000 * 60 * 60 * 24)) + 1)) return;
-    alert(tips[Math.floor(Math.random() * tips.length)]);
+    const currentDay = Math.floor((new Date() - new Date('2025-08-28')) / (1000 * 60 * 60 * 24)) + 1;
+    if (schedule.find(task => task.day === currentDay)) {
+        alert(tips[Math.floor(Math.random() * tips.length)]);
+    }
 };
