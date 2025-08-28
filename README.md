@@ -1,2 +1,2 @@
 # AI-Learning-Hub
-My Arabic Learning Website
+My AI Learning Website
