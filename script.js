@@ -195,3 +195,4 @@ function readAloud(id) {
         alert('Browser does not support text-to-speech. Use Chrome Read Aloud extension.');
     }
 }
+
